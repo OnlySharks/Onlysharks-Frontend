@@ -21,12 +21,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c">
     <link rel="stylesheet" href="/assets/css/styles.min.css">
     <script>
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-
         function getFormData($form){
             var unindexed_array = $form.serializeArray();
             var indexed_array = {};
@@ -39,12 +33,17 @@
         }
 
         function submitreg() {
-            let formData = JSON.stringify(getFormData($('#login_form')))
+            var dateControl = document.querySelector('input[type="date"]');
+
+            let formData = getFormData($('#register_form'))
+            formData.displayname = getFormData($('#register_form')).username
+            formData.birthday = dateControl.value
+
             let post_data = $.ajax({
                 type: "POST",
-                url: "http://localhost:8000/api/users/login",
+                url: "http://localhost:8000/api/users/create",
                 async: false,
-                data: formData,
+                data: JSON.stringify(formData),
                 complete: function(response){
                     return response
 
@@ -58,11 +57,6 @@
             document.cookie = "user_id=" + userCreds[1] + ";"
             document.cookie = "jwt=" + userCreds[0] + ";"
             console.log(document.cookie)
-
-            if (getCookie("jwt") === "err" || getCookie("user_id") === "undefined") {
-                alert("Incorrect username or password!")
-                return
-            }
 
             window.location.replace("/home")
         }
@@ -80,18 +74,20 @@
             <div class="container" style="filter: blur(0px);margin-top: 15px;">
                 <div class="row">
                     <div class="col d-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-xl-center align-items-xl-center">
-                        <h1 class="display-4" style="color: rgb(255,255,255);font-size: 45px;">Login into an Existing Account</h1>
+                        <h1 class="display-4" style="color: rgb(255,255,255);font-size: 45px;">Register a New Account</h1>
                         <hr>
-                        <form id="login_form"><span class="d-xl-flex align-items-xl-center" style="color: rgb(255,255,255);font-size: 20px;font-weight: bold;margin-bottom: 10px;">Username: <input class="form-control" type="text" placeholder="sharkie" name="username" style="margin-left: 10px;"></span>
+                        <form id="register_form"><span class="d-xl-flex align-items-xl-center" style="color: rgb(255,255,255);font-size: 20px;font-weight: bold;margin-bottom: 10px;">Username: <input class="form-control" type="text" placeholder="sharkie" name="username" style="margin-left: 10px;"></span>
                             <span
-                                class="d-xl-flex align-items-xl-center" style="color: rgb(255,255,255);font-size: 20px;font-weight: bold;margin-bottom: 10px;">Password: <input class="form-control" type="password" name="password" placeholder="************" style="margin-left: 10px;"></span>
+                                class="d-xl-flex align-items-xl-center" style="color: rgb(255,255,255);font-size: 20px;font-weight: bold;margin-bottom: 10px;">Email: <input class="form-control" type="email" placeholder="example@example.com" name="email" style="margin-left: 10px;"></span><span class="d-xl-flex align-items-xl-center" style="color: rgb(255,255,255);font-size: 20px;font-weight: bold;margin-bottom: 10px;">Password: <input class="form-control" type="password" name="password" placeholder="************" style="margin-left: 10px;"></span>
+                                <span
+                                    class="d-xl-flex align-items-xl-center" style="color: rgb(255,255,255);font-size: 20px;font-weight: bold;margin-bottom: 10px;">Birthday: <input class="form-control" type="date" style="margin-left: 10px;"></span>
                         </form>
                     </div>
                 </div>
             </div>
             <div class="container" style="filter: blur(0px);margin-top: 15px;">
                 <div class="row">
-                    <div class="col d-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-xl-center align-items-xl-center"><button class="btn btn-primary" type="button" style="color: rgb(0,0,0);background: rgb(255,255,255);font-size: 30px;font-family: 'M PLUS Rounded 1c', sans-serif;" onclick="submitreg()">Login</button></div>
+                    <div class="col d-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-xl-center align-items-xl-center"><button class="btn btn-primary" type="button" style="color: rgb(0,0,0);background: rgb(255,255,255);font-size: 30px;font-family: 'M PLUS Rounded 1c', sans-serif;" onclick="submitreg()">Register</button></div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,9 @@
+pub mod home;
+pub mod profile;
+pub mod post;
+pub mod timeline;
+pub mod settings;
+pub mod login;
+pub mod register;
+pub mod about;
+pub mod logout;
